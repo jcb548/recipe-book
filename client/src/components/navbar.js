@@ -12,16 +12,28 @@ export const Navbar = () => {
   };
   return (
     <div className="navbar">
-      <Link to="/">Home</Link>
-      {!cookies.access_token ? (
-        <Link to="/auth">Login/Register</Link>
-      ) : (
-        <>
-          <Link to="/create-recipe">CreateRecipe</Link>
-          <Link to="/saved-recipes">SavedRecipes</Link>
-          <button onClick={logout}>Logout</button>
-        </>
-      )}
+      <div className="links">
+        <Link to="/" className="link">
+          Home
+        </Link>
+        {!cookies.access_token ? (
+          <Link to="/auth" className="link">
+            Login/Register
+          </Link>
+        ) : (
+          <>
+            <Link to="/create-recipe" className="link">
+              CreateRecipe
+            </Link>
+            <Link to="/saved-recipes" className="link">
+              SavedRecipes
+            </Link>
+            <button onClick={logout} className="link">
+              Logout
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
