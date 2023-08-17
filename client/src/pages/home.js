@@ -56,25 +56,28 @@ export const Home = () => {
 
   return (
     <div>
-      <h2>Recipes</h2>
+      <h2 className="recipesTitle">Recipes</h2>
       <ul>
         {recipes.map((recipe) => (
-          <li key={recipe._id}>
-            <div>
-              <h2>{recipe.name}</h2>
-              <button
-                onClick={() => saveRecipe(recipe._id)}
-                disabled={isRecipeSaved(recipe._id)}
-              >
-                {isRecipeSaved(recipe._id) ? "Saved" : "Save"}
-              </button>
+          <div key={recipe._id} className="recipe">
+            <div className="recipeTitle">{recipe.name}</div>
+            <img src={recipe.image} alt={recipe.name} className="picture" />
+            <div className="sectionTitle">Ingredients:</div>
+            <div className="ingredients">
+              {recipe.ingredients.map((ingredient) => (
+                <li>{ingredient}</li>
+              ))}
             </div>
-            <div className="instructions">
-              <p>{recipe.instructions}</p>
-            </div>
-            <img src={recipe.image} alt={recipe.name} />
-            <p>Cooking Time: {recipe.cookingTime} (minutes)</p>
-          </li>
+            <div className="sectionTitle">Instructions:</div>
+            <div className="instructions">{recipe.instructions}</div>
+            <button
+              onClick={() => saveRecipe(recipe._id)}
+              disabled={isRecipeSaved(recipe._id)}
+              className="savedButton"
+            >
+              {isRecipeSaved(recipe._id) ? "Saved" : "Save"}
+            </button>
+          </div>
         ))}
       </ul>
     </div>
