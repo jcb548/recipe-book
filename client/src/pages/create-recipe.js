@@ -11,12 +11,11 @@ export const CreateRecipe = () => {
     name: "",
     ingredients: [],
     instructions: "",
-    imageUrl: "",
+    image: "",
     cookingTime: 0,
     userOwner: userID,
   });
   const [cookies, _] = useCookies(["access_token"]);
-
   const navigate = useNavigate();
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -34,18 +33,33 @@ export const CreateRecipe = () => {
     setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
   };
 
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    const base64 = await convertToBase64(file);
+    setRecipe({ ...recipe, image: base64 });
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:3001/recipes", recipe, {
-        headers: { authorization: cookies.access_token },
-      });
-      alert("Recipe Created!");
-      navigate("/");
+      const response = await axios.post(
+        "http://localhost:3001/recipes",
+        recipe,
+        {
+          headers: { authorization: cookies.access_token },
+        }
+      );
+      if (response.data._message) {
+        alert(response.data._message);
+      } else {
+        alert("Recipe Created!");
+        navigate("/");
+      }
     } catch (err) {
       console.error(err);
     }
   };
+
   return (
     <div className="create-recipe">
       <h2>Create Recipe</h2>
@@ -71,12 +85,13 @@ export const CreateRecipe = () => {
           name="instructions"
           onChange={handleChange}
         />
-        <label htmlFor="imageUrl">Image Url</label>
+        <label htmlFor="image">Image</label>
         <input
-          type="text"
-          id="imageUrl"
-          name="imageUrl"
-          onChange={handleChange}
+          type="file"
+          accept=".jpeg, .png, .jpg"
+          id="image"
+          name="image"
+          onChange={(event) => handleFileUpload(event)}
         />
         <label htmlFor="cookingTime">cookingTime</label>
         <input
@@ -92,3 +107,16 @@ export const CreateRecipe = () => {
     </div>
   );
 };
+
+function convertToBase64(file) {
+  return new Promise((res, err) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      res(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      err(error);
+    };
+  });
+}
