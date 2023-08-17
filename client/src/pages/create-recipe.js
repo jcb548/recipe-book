@@ -12,7 +12,6 @@ export const CreateRecipe = () => {
     ingredients: [],
     instructions: "",
     image: "",
-    cookingTime: 0,
     userOwner: userID,
   });
   const [cookies, _] = useCookies(["access_token"]);
@@ -92,13 +91,6 @@ export const CreateRecipe = () => {
           id="image"
           name="image"
           onChange={(event) => handleFileUpload(event)}
-        />
-        <label htmlFor="cookingTime">cookingTime</label>
-        <input
-          type="number"
-          id="cookingTime"
-          name="cookingTime"
-          onChange={handleChange}
         />
         <button onClick={onSubmit} type="submit">
           Submit
